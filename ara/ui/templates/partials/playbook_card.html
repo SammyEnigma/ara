@@ -16,7 +16,19 @@
       </div>
     </div>
     <div class="ara-playbook-path">
-      {% if playbook.name is not None %}{{ playbook.name | truncatechars:50 }}: {{ playbook.path | truncatepath:150 }}{% else %}{{ playbook.path | truncatepath:200 }}{% endif %}
+      {% if playbook.name is not None %}
+        {% if static_generation %}
+          {{ playbook.name | truncatechars:50 }}: {{ playbook.path | truncatepath:150 }}
+        {% else %}
+        <a href="{% url 'ui:index' %}?name={{ playbook.name }}">{{ playbook.name | truncatechars:50 }}</a>: <a href="{% url 'ui:index' %}?path={{ playbook.path }}">{{ playbook.path | truncatepath:150 }}</a>
+        {% endif %}
+      {% else %}
+        {% if static_generation %}
+          {{ playbook.path | truncatepath:200 }}
+        {% else %}
+          <a href="{% url 'ui:index' %}?path={{ playbook.path }}">{{ playbook.path | truncatepath:200 }}</a>
+        {% endif %}
+      {% endif %}
     </div>
   </div>
 
