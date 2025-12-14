@@ -5,7 +5,61 @@
 Changelog and release notes
 ***************************
 
-1.7.3 (2025-08-16)
+1.7.4 (2025-12-01)
+##################
+
+https://codeberg.org/ansible-community/ara/releases/tag/1.7.4
+
+.. code-block:: text
+
+    1.7.4 is a feature release for ara's web UI and includes a fix for using Django 5.2.x with MariaDB.
+    
+    Changes since 1.7.3: https://codeberg.org/ansible-community/ara/compare/1.7.3...1.7.4
+    
+    Server
+    ------
+    Django 5.0 changed how uuid fields (for plays and tasks) are managed with MariaDB.
+    The models have been updated and a new migration was added accordingly. See upgrade notes.
+    
+    UI
+    ---
+    - Loading or refreshing a page using the light theme should no longer flicker
+    - The playbook header at the top of a playbook report has been redesigned for clarity and mobile responsiveness
+    - The hosts, files and records sections have received similar treatment
+    - The recorded files are now displayed inside a file hierarchy browser
+    - When ``gather_facts: true``, ara will now display a dashboard including (but not limited to):
+      - load average, memory and disk usage
+      - uptime, OS, kernel and python version
+      - network interfaces
+    - It is still possible to access the raw host facts and a search box has been added
+    
+    Client
+    -------
+    - Include the HTTP error code when logging about an API error
+    
+    Container images
+    -------------
+    - Bumped fedora images to 43
+    
+    Tests
+    --------
+    - Maintenance for ansible-core 2.19/2.10 compatibility
+      For ara's own tests, written in ansible. ara already worked with 2.19 and 2.20.
+    - Bumped tests up to fedora-43, debian-13 and ansible-core 2.20
+    - Improved how codeberg CI results are sent to demo.recordsansible.org
+    
+    Upgrade notes
+    ------------------
+    Update the version of ara and restart the server if one is running.
+    
+    Then, a new SQL migration takes care of the compatibility for Django 5.2 with MariaDB.
+    As always, take a backup of the database and run ``ara-manage migrate`` after updating ara where the server runs from.
+    
+    It is largely no-op and runs quickly, even on large databases.
+    
+    ara 1.7.4 is expected to be the last version to support python3.8.
+
+1.7.3 (2025-08-21)
 ##################
 
 https://codeberg.org/ansible-community/ara/releases/tag/1.7.3
@@ -53,8 +107,8 @@ https://codeberg.org/ansible-community/ara/releases/tag/1.7.3
     
     This new module provides the ability to manipulate ara's labels on playbooks.
     Excerpt from the documentation:
-    ```
     
+    ```
     - name: Add a static label to this playbook (the one that is running)
       # Note: By default Ansible will run this task on every host.
       # Consider the use case and declare 'run_once: true' when there is no need to
