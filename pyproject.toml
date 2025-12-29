@@ -199,5 +199,21 @@ force_grid_wrap = 0
 combine_as_imports = true
 line_length = 120
 
+[tool.sphinx-pyproject]
+copyright = "2024, ARA Records Ansible authors"
+project = "ara"
+extensions = [
+  "sphinxcontrib.programoutput",
+  "sphinx.ext.autodoc",
+  "sphinx.ext.autosectionlabel"
+]
+master_doc = "index"
+source_suffix = ".rst"
+pygments_style = "default"
+add_module_names = true
+add_function_parentheses = true
+autosectionlabel_prefix_document = true
+html_theme = "sphinx_rtd_theme"
+
 [tool.uv]
 package = true

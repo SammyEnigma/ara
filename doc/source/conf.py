@@ -3,55 +3,18 @@
 
 import os
 import sys
+from sphinx_pyproject import SphinxConfig
 
-import pbr.version
-import sphinx_rtd_theme
+config = SphinxConfig("../../pyproject.toml", globalns=globals())
 
-version_info = pbr.version.VersionInfo("ara")
-
+# insert root path to look for ara namespace (scripts won't be runnable otherwise)
 sys.path.insert(0, os.path.abspath("../.."))
-# -- General configuration ----------------------------------------------------
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ["sphinxcontrib.programoutput", "sphinx.ext.autodoc", "sphinx.ext.autosectionlabel"]
-autosectionlabel_prefix_document = True
-
-# autodoc generation is a bit aggressive and a nuisance when doing heavy
-# text edit cycles.
-# execute "export SPHINX_DEBUG=1" in your terminal to disable
-
-# The suffix of source filenames.
-source_suffix = ".rst"
-
-# The master toctree document.
-master_doc = "index"
-
-# General information about the project.
-project = "ara"
-copyright = "2024, ARA Records Ansible authors"
-author = "ARA Records Ansible authors"
-
-# The short X.Y version.
-version = version_info.version_string()
-# The full version, including alpha/beta/rc tags.
-release = version_info.release_string()
-
-# If true, '()' will be appended to :func: etc. cross-reference text.
-add_function_parentheses = True
-
-# If true, the current module name will be prepended to all description
-# unit titles (such as .. function::).
-add_module_names = True
-
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "default"
 
 # -- Options for HTML output --------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = "sphinx_rtd_theme"
+html_theme = config.get('html_theme', "sphinx_rtd_theme")
 html_theme_path = []
 html_static_path = ["_static"]
 
