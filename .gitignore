@@ -9,6 +9,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+ara/setup/_version.py
 .Python
 env/
 build/

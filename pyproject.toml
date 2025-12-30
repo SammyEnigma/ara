@@ -1,7 +1,7 @@
 [project]
 name = "ara"
 description = "ARA Records Ansible"
-version = "1.7.4"
+dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
@@ -22,13 +22,19 @@ classifiers = [
 ]
 dependencies = [
     "cliff",
-    # pbr is also a direct dependency
-    "pbr",
     "requests>=2.14.2",
 ]
 
 [[project.authors]]
 name = "ARA Records Ansible authors"
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_file = "ara/setup/_version.py"
+version_scheme = "no-guess-dev"
 
 [project.urls]
 Homepage = "https://codeberg.org/ansible-community/ara"

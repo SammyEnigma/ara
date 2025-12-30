@@ -3,9 +3,8 @@
 
 import os
 
-import pbr.version
-
-ara_version = pbr.version.VersionInfo("ara").release_string()
+# generated from setuptools-scm at build
+from ._version import version as ara_version
 
 # The path where ARA is installed (parent directory)
 path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))

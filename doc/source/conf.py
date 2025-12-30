@@ -3,18 +3,29 @@
 
 import os
 import sys
+
 from sphinx_pyproject import SphinxConfig
+from ara.setup import _version
 
-config = SphinxConfig("../../pyproject.toml", globalns=globals())
+# -- General configuration ----------------------------------------------------
+# Most of the general configuration should be handled in pyproject.toml
 
-# insert root path to look for ara namespace (scripts won't be runnable otherwise)
+config = SphinxConfig(
+    "../../pyproject.toml",
+    globalns=globals(),
+    config_overrides={
+        "version": ".".join(map(str, _version.version_tuple[:3])),  # The short X.Y.Z version.
+        "release": _version.version,  # The full version, including alpha/beta/rc tags.
+    },
+)
+
 sys.path.insert(0, os.path.abspath("../.."))
 
 # -- Options for HTML output --------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = config.get('html_theme', "sphinx_rtd_theme")
+html_theme = config.get("html_theme", "sphinx_rtd_theme")
 html_theme_path = []
 html_static_path = ["_static"]
 
