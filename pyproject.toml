@@ -185,6 +185,7 @@ exclude = [
     "*egg",
     "build",
     "ara/api/migrations",
+    "ara/setup/_version.py",
 ]
 
 [tool.isort]
@@ -198,6 +199,7 @@ skip = [
     ".cache",
     ".venv",
     "ara/api/migrations",
+    "ara/setup/_version.py",
 ]
 multi_line_output = 3
 include_trailing_comma = true
@@ -207,7 +209,7 @@ line_length = 120
 
 [tool.black]
 line-length = 120
-exclude = 'migrations'
+exclude = "[migrations|ara/setup/_version.py]"
 
 [tool.sphinx-pyproject]
 copyright = "2024, ARA Records Ansible authors"

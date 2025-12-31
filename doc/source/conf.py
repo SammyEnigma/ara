@@ -5,6 +5,7 @@ import os
 import sys
 
 from sphinx_pyproject import SphinxConfig
+
 from ara.setup import _version
 
 # -- General configuration ----------------------------------------------------
