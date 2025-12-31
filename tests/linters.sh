@@ -27,7 +27,7 @@ if [ -z "${VIRTUAL_ENV}" ]; then
 fi
 
 banner black
-time black --config "${PROJECT_ROOT}/.black.toml" --diff --check "${LINTING_TARGETS[@]}"
+time black --diff --check "${LINTING_TARGETS[@]}"
 ret+=$?
 
 banner isort

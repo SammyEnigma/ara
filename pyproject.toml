@@ -205,6 +205,10 @@ force_grid_wrap = 0
 combine_as_imports = true
 line_length = 120
 
+[tool.black]
+line-length = 120
+exclude = 'migrations'
+
 [tool.sphinx-pyproject]
 copyright = "2024, ARA Records Ansible authors"
 project = "ara"
