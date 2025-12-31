@@ -65,6 +65,30 @@
             state: present
             update_cache: true
 
+        # On a need basis, we might want to configure ansible and ara on the VM
+        # from environment variables set on the host.
+        - name: Pass-through environment variables from the host
+          # Because there might be secrets
+          no_log: true
+          ansible.builtin.copy:
+            dest: /etc/profile.d/ci_env.sh
+            mode: 0640
+            owner: "{{ ci_user }}"
+            group: "{{ ci_group }}"
+            content: |
+              #!/bin/bash
+              export ANSIBLE_SSH_ARGS="{{ lookup('env', 'ANSIBLE_SSH_ARGS', default='-C -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no') }}"
+              export ANSIBLE_FORKS={{ lookup('env', 'ANSIBLE_FORKS', default='25') }}
+              export ARA_API_CLIENT={{ lookup('env', 'ARA_API_CLIENT', default='offline') }}
+              export ARA_API_SERVER="{{ lookup('env', 'ARA_API_SERVER', default='http://127.0.0.1/') }}"
+              export ARA_API_USERNAME="{{ lookup('env', 'ARA_API_USERNAME', default='') }}"
+              export ARA_API_PASSWORD="{{ lookup('env', 'ARA_API_PASSWORD', default='') }}"
+              export ARA_CALLBACK_THREADS={{ lookup('env', 'ARA_CALLBACK_THREADS', default='1') }}
+              export ARA_DEFAULT_LABELS="{{ lookup('env', 'ARA_DEFAULT_LABELS', default='') }}"
+
+        - name: Ensure SSH connection is re-established
+          ansible.builtin.meta: reset_connection
+
         # This is done with elevated privileges to let git create the workspace directory
         # It means we need to fix permissions afterwards
         - name: Prepare git repo with pull request

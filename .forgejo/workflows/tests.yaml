@@ -77,7 +77,10 @@ jobs:
       - name: Run container tests on a new VM
         shell: bash
         env:
-          ANSIBLE_SSH_ARGS: "-C -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=accept-new -o StrictHostKeyChecking=no"
+          # These env variables are exposed to the container but we need to expose them to the VM as well
+          # (That's where the test playbook ends up running)
+          # They will be inherited down to the VM by setting up a /etc/profile.d/ci_env.sh
+          ANSIBLE_SSH_ARGS: "-C -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no"
           ARA_API_CLIENT: http
           ARA_API_SERVER: https://demo.recordsansible.org
           ARA_CALLBACK_THREADS: 4
