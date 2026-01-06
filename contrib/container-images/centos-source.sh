@@ -10,7 +10,7 @@ SOURCE_DIR=$(cd "${SCRIPT_DIR}/../.." && pwd -P)
 
 # Clone the source to a temporary directory and generate an sdist tarball we can install from
 pushd ${SOURCE_DIR}
-python3 setup.py sdist
+python3 -m build --sdist
 sdist=$(ls dist/ara-*.tar.gz)
 popd
 
