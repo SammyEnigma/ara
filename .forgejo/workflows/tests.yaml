@@ -58,7 +58,7 @@ jobs:
           ARA_CALLBACK_THREADS: 4
           # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
           ARA_DEFAULT_LABELS: >-
-            repo:${{ github.repository }},ref:${{ github.ref }},sha:${{ github.sha }}
+            repo:${{ github.repository }},ref:${{ github.ref }},sha:${{ github.sha }},job:ansible-integration
         run: |
           tox -e ansible-integration
 
@@ -86,7 +86,7 @@ jobs:
           ARA_CALLBACK_THREADS: 4
           # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
           ARA_DEFAULT_LABELS: >-
-            repo:${{ github.repository }},ref:${{ github.ref }},sha:${{ github.sha }}
+            repo:${{ github.repository }},ref:${{ github.ref }},sha:${{ github.sha }},job:container-images
         run: |
           tox -e ansible-integration --notest
           source .tox/ansible-integration/bin/activate
