@@ -23,3 +23,4 @@ Table of Contents
     Frequently asked questions <faq>
     Troubleshooting <troubleshooting>
     Changelog and release notes <changelog-release-notes>
+    Distribution packages <distribution-packages>
