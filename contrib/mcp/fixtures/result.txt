@@ -1,0 +1,301 @@
+# /api/v1/results/995551
+{
+  "id": 995551,
+  "status": "ok",
+  "playbook": {
+    "id": 4460,
+    "items": {
+      "plays": 1,
+      "tasks": 8,
+      "results": 4,
+      "hosts": 1,
+      "files": 1,
+      "records": 0
+    },
+    "arguments": {
+      "version": null,
+      "verbosity": 3,
+      "private_key_file": null,
+      "remote_user": null,
+      "connection": "ssh",
+      "timeout": null,
+      "ssh_common_args": null,
+      "sftp_extra_args": null,
+      "scp_extra_args": null,
+      "ssh_extra_args": null,
+      "ask_pass": false,
+      "connection_password_file": null,
+      "force_handlers": false,
+      "become": false,
+      "become_method": "sudo",
+      "become_user": null,
+      "become_ask_pass": false,
+      "become_password_file": null,
+      "tags": [
+        "all"
+      ],
+      "skip_tags": [],
+      "check": false,
+      "diff": false,
+      "inventory": [
+        "/etc/ansible/hosts"
+      ],
+      "listhosts": false,
+      "subset": null,
+      "flush_cache": false,
+      "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+      "vault_ids": [],
+      "ask_vault_pass": false,
+      "vault_password_files": [],
+      "forks": 5,
+      "module_path": null,
+      "syntax": false,
+      "listtasks": false,
+      "listtags": false,
+      "step": false,
+      "start_at_task": null,
+      "args": [
+        "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml"
+      ]
+    },
+    "labels": [
+      {
+        "id": 29,
+        "name": "check:False"
+      },
+      {
+        "id": 30,
+        "name": "tags:all"
+      },
+      {
+        "id": 118,
+        "name": "repo:ansible-community/ara"
+      },
+      {
+        "id": 196,
+        "name": "ref:refs/pull/623/head"
+      },
+      {
+        "id": 197,
+        "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+      }
+    ],
+    "started": "2025-11-27T22:49:08.352266Z",
+    "ended": "2025-11-27T22:49:25.047963Z",
+    "duration": "00:00:16.695697",
+    "name": null,
+    "ansible_version": "2.20.0",
+    "client_version": "0.0.0",
+    "python_version": "3.14.0",
+    "server_version": "1.7.4.dev11",
+    "status": "completed",
+    "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+    "controller": "3249b4de22bb",
+    "user": "root"
+  },
+  "play": {
+    "id": 91882,
+    "items": {
+      "tasks": 8,
+      "results": 4
+    },
+    "started": "2025-11-27T22:49:08.880012Z",
+    "ended": "2025-11-27T22:49:24.629825Z",
+    "duration": "00:00:15.749813",
+    "name": "assert that facts are ignored properly",
+    "status": "completed"
+  },
+  "task": {
+    "id": 653230,
+    "items": {
+      "results": 1
+    },
+    "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+    "tags": [],
+    "started": "2025-11-27T22:49:20.982422Z",
+    "ended": "2025-11-27T22:49:21.879175Z",
+    "duration": "00:00:00.896753",
+    "name": "Print facts for assertion",
+    "uuid": "d5183dc0-c576-b8f5-495d-000000000009",
+    "action": "debug",
+    "lineno": 51,
+    "handler": false,
+    "status": "completed",
+    "file": 394480
+  },
+  "host": {
+    "id": 13112,
+    "name": "localhost",
+    "changed": 0,
+    "failed": 0,
+    "ok": 8,
+    "skipped": 0,
+    "unreachable": 0
+  },
+  "delegated_to": [],
+  "content": {
+    "changed": false,
+    "msg": {
+      "ansible_local": {},
+      "apparmor": {
+        "status": "disabled"
+      },
+      "architecture": "x86_64",
+      "cmdline": {
+        "BOOT_IMAGE": "/boot/vmlinuz-6.1.0-41-cloud-amd64",
+        "console": "ttyS0,115200",
+        "consoleblank": "0",
+        "earlyprintk": "ttyS0,115200",
+        "ro": true,
+        "root": "PARTUUID=322c8fec-4c0b-46ea-8730-7f13abc02949"
+      },
+      "date_time": {
+        "date": "2025-11-27",
+        "day": "27",
+        "epoch": "1764283758",
+        "epoch_int": "1764283758",
+        "hour": "22",
+        "iso8601": "2025-11-27T22:49:18Z",
+        "iso8601_basic": "20251127T224918296449",
+        "iso8601_basic_short": "20251127T224918",
+        "iso8601_micro": "2025-11-27T22:49:18.296449Z",
+        "minute": "49",
+        "month": "11",
+        "second": "18",
+        "time": "22:49:18",
+        "tz": "UTC",
+        "tz_dst": "UTC",
+        "tz_offset": "+0000",
+        "weekday": "Thursday",
+        "weekday_number": "4",
+        "weeknumber": "47",
+        "year": "2025"
+      },
+      "distribution": "Fedora",
+      "distribution_file_parsed": true,
+      "distribution_file_path": "/etc/redhat-release",
+      "distribution_file_variety": "RedHat",
+      "distribution_major_version": "43",
+      "distribution_release": "",
+      "distribution_version": "43",
+      "dns": {
+        "nameservers": [
+          "10.89.2.1",
+          "1.1.1.1"
+        ],
+        "search": [
+          "dns.podman",
+          "."
+        ]
+      },
+      "domain": "",
+      "effective_group_id": 0,
+      "effective_user_id": 0,
+      "env": {
+        "ANSIBLE_CONFIG": "/workspace/ansible-community/ara/.tox/ansible-integration/tmp/.ara/server/ansible.cfg",
+        "ARA_API_CLIENT": "http",
+        "ARA_API_PASSWORD": "%8bXxcvDW^o8obbe",
+        "ARA_API_SERVER": "https://demo.recordsansible.org",
+        "ARA_API_USERNAME": "codeberg",
+        "ARA_BASE_DIR": "/workspace/ansible-community/ara/.tox/ansible-integration/tmp/.ara/server",
+        "ARA_CALLBACK_THREADS": "4",
+        "ARA_DEBUG": "True",
+        "ARA_DEFAULT_LABELS": "repo:ansible-community/ara,ref:refs/pull/623/head,sha:9f9683d61b3a6f5d28396221a8d30405a10c9731",
+        "ARA_IGNORED_FACTS": "all",
+        "ARA_LOG_LEVEL": "DEBUG",
+        "ARA_SECRET_KEY": "testing",
+        "HOME": "/root",
+        "LANG": "C.UTF-8",
+        "PATH": "/workspace/ansible-community/ara/.tox/ansible-integration/tmp/.ara/virtualenv/bin:/bin:/usr/bin:/usr/local/bin",
+        "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+        "PWD": "/workspace/ansible-community/ara/tests/integration",
+        "PYTHONHASHSEED": "2681055966",
+        "PYTHONIOENCODING": "utf-8",
+        "SHLVL": "2",
+        "TERM": "xterm",
+        "TOX_ENV_DIR": "/workspace/ansible-community/ara/.tox/ansible-integration",
+        "TOX_ENV_NAME": "ansible-integration",
+        "TOX_PACKAGE": "/workspace/ansible-community/ara/.tox/.tmp/package/1/ara-0.0.0-0.editable-py2.py3-none-any.whl",
+        "TOX_WORK_DIR": "/workspace/ansible-community/ara/.tox",
+        "VIRTUAL_ENV": "/workspace/ansible-community/ara/.tox/ansible-integration",
+        "_": "/workspace/ansible-community/ara/.tox/ansible-integration/tmp/.ara/virtualenv/bin/python3",
+        "__TOX_ENVIRONMENT_VARIABLE_ORIGINAL_CI": "true"
+      },
+      "fips": false,
+      "fqdn": "3249b4de22bb",
+      "gather_subset": [
+        "!all",
+        "!any",
+        "kernel",
+        "python"
+      ],
+      "hostname": "3249b4de22bb",
+      "kernel": "6.1.0-41-cloud-amd64",
+      "kernel_version": "#1 SMP PREEMPT_DYNAMIC Debian 6.1.158-1 (2025-11-09)",
+      "lsb": {},
+      "machine": "x86_64",
+      "module_setup": true,
+      "nodename": "3249b4de22bb",
+      "os_family": "RedHat",
+      "pkg_mgr": "dnf5",
+      "proc_cmdline": {
+        "BOOT_IMAGE": "/boot/vmlinuz-6.1.0-41-cloud-amd64",
+        "console": [
+          "tty0",
+          "ttyS0,115200"
+        ],
+        "consoleblank": "0",
+        "earlyprintk": "ttyS0,115200",
+        "ro": true,
+        "root": "PARTUUID=322c8fec-4c0b-46ea-8730-7f13abc02949"
+      },
+      "python": {
+        "executable": "/workspace/ansible-community/ara/.tox/ansible-integration/tmp/.ara/virtualenv/bin/python3",
+        "has_sslcontext": true,
+        "type": "cpython",
+        "version": {
+          "major": 3,
+          "micro": 0,
+          "minor": 14,
+          "releaselevel": "final",
+          "serial": 0
+        },
+        "version_info": [
+          3,
+          14,
+          0,
+          "final",
+          0
+        ]
+      },
+      "python_version": "3.14.0",
+      "real_group_id": 0,
+      "real_user_id": 0,
+      "selinux": {
+        "status": "disabled"
+      },
+      "selinux_python_present": true,
+      "service_mgr": "tail",
+      "system": "Linux",
+      "system_capabilities": [
+        "ep"
+      ],
+      "system_capabilities_enforced": "True",
+      "user_dir": "/root",
+      "user_gecos": "Super User",
+      "user_gid": 0,
+      "user_id": "root",
+      "user_shell": "/bin/bash",
+      "user_uid": 0,
+      "userspace_architecture": "x86_64",
+      "userspace_bits": "64"
+    }
+  },
+  "created": "2025-11-27T22:49:21.866796Z",
+  "updated": "2025-11-27T22:49:21.866817Z",
+  "started": "2025-11-27T22:49:21.393896Z",
+  "ended": "2025-11-27T22:49:21.443499Z",
+  "duration": "00:00:00.049603",
+  "changed": false,
+  "ignore_errors": false
+}

@@ -1,0 +1,88 @@
+# /api/v1/results
+{
+  "count": 957832,
+  "next": "https://demo.recordsansible.org/api/v1/results?limit=5&offset=5",
+  "previous": null,
+  "results": [
+    {
+      "id": 995551,
+      "status": "ok",
+      "playbook": 4460,
+      "play": 91882,
+      "task": 653230,
+      "host": 13112,
+      "delegated_to": [],
+      "created": "2025-11-27T22:49:21.866796Z",
+      "updated": "2025-11-27T22:49:21.866817Z",
+      "started": "2025-11-27T22:49:21.393896Z",
+      "ended": "2025-11-27T22:49:21.443499Z",
+      "duration": "00:00:00.049603",
+      "changed": false,
+      "ignore_errors": false
+    },
+    {
+      "id": 995550,
+      "status": "ok",
+      "playbook": 4460,
+      "play": 91882,
+      "task": 653229,
+      "host": 13112,
+      "delegated_to": [],
+      "created": "2025-11-27T22:49:20.552411Z",
+      "updated": "2025-11-27T22:49:20.552430Z",
+      "started": "2025-11-27T22:49:20.099990Z",
+      "ended": "2025-11-27T22:49:20.143811Z",
+      "duration": "00:00:00.043821",
+      "changed": false,
+      "ignore_errors": false
+    },
+    {
+      "id": 995549,
+      "status": "ok",
+      "playbook": 4460,
+      "play": 91882,
+      "task": 653228,
+      "host": 13112,
+      "delegated_to": [],
+      "created": "2025-11-27T22:49:18.841088Z",
+      "updated": "2025-11-27T22:49:18.841108Z",
+      "started": "2025-11-27T22:49:17.029236Z",
+      "ended": "2025-11-27T22:49:18.371086Z",
+      "duration": "00:00:01.341850",
+      "changed": false,
+      "ignore_errors": false
+    },
+    {
+      "id": 995548,
+      "status": "ok",
+      "playbook": 4460,
+      "play": 91882,
+      "task": 653225,
+      "host": 13112,
+      "delegated_to": [],
+      "created": "2025-11-27T22:49:12.814696Z",
+      "updated": "2025-11-27T22:49:12.814717Z",
+      "started": "2025-11-27T22:49:11.838858Z",
+      "ended": "2025-11-27T22:49:11.905885Z",
+      "duration": "00:00:00.067027",
+      "changed": false,
+      "ignore_errors": false
+    },
+    {
+      "id": 995547,
+      "status": "skipped",
+      "playbook": 4459,
+      "play": 91881,
+      "task": 653223,
+      "host": 13111,
+      "delegated_to": [],
+      "created": "2025-11-27T22:49:05.110612Z",
+      "updated": "2025-11-27T22:49:05.110631Z",
+      "started": "2025-11-27T22:49:04.644942Z",
+      "ended": "2025-11-27T22:49:04.702340Z",
+      "duration": "00:00:00.057398",
+      "changed": false,
+      "ignore_errors": false
+    }
+  ]
+}

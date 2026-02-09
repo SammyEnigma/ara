@@ -1,0 +1,473 @@
+# /api/v1/playbooks
+{
+  "count": 4328,
+  "next": "https://demo.recordsansible.org/api/v1/playbooks?limit=5&offset=5",
+  "previous": null,
+  "results": [
+    {
+      "id": 4460,
+      "items": {
+        "plays": 1,
+        "tasks": 8,
+        "results": 4,
+        "hosts": 1,
+        "files": 1,
+        "records": 0
+      },
+      "arguments": {
+        "version": null,
+        "verbosity": 3,
+        "private_key_file": null,
+        "remote_user": null,
+        "connection": "ssh",
+        "timeout": null,
+        "ssh_common_args": null,
+        "sftp_extra_args": null,
+        "scp_extra_args": null,
+        "ssh_extra_args": null,
+        "ask_pass": false,
+        "connection_password_file": null,
+        "force_handlers": false,
+        "become": false,
+        "become_method": "sudo",
+        "become_user": null,
+        "become_ask_pass": false,
+        "become_password_file": null,
+        "tags": [
+          "all"
+        ],
+        "skip_tags": [],
+        "check": false,
+        "diff": false,
+        "inventory": [
+          "/etc/ansible/hosts"
+        ],
+        "listhosts": false,
+        "subset": null,
+        "flush_cache": false,
+        "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+        "vault_ids": [],
+        "ask_vault_pass": false,
+        "vault_password_files": [],
+        "forks": 5,
+        "module_path": null,
+        "syntax": false,
+        "listtasks": false,
+        "listtags": false,
+        "step": false,
+        "start_at_task": null,
+        "args": [
+          "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml"
+        ]
+      },
+      "labels": [
+        {
+          "id": 29,
+          "name": "check:False"
+        },
+        {
+          "id": 30,
+          "name": "tags:all"
+        },
+        {
+          "id": 118,
+          "name": "repo:ansible-community/ara"
+        },
+        {
+          "id": 196,
+          "name": "ref:refs/pull/623/head"
+        },
+        {
+          "id": 197,
+          "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+        }
+      ],
+      "created": "2025-11-27T22:49:08.859387Z",
+      "updated": "2025-11-27T22:49:25.450363Z",
+      "started": "2025-11-27T22:49:08.352266Z",
+      "ended": "2025-11-27T22:49:25.047963Z",
+      "duration": "00:00:16.695697",
+      "name": null,
+      "ansible_version": "2.20.0",
+      "client_version": "0.0.0",
+      "python_version": "3.14.0",
+      "server_version": "1.7.4.dev11",
+      "status": "completed",
+      "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+      "controller": "3249b4de22bb",
+      "user": "root"
+    },
+    {
+      "id": 4459,
+      "items": {
+        "plays": 2,
+        "tasks": 11,
+        "results": 8,
+        "hosts": 1,
+        "files": 3,
+        "records": 0
+      },
+      "arguments": {
+        "version": null,
+        "verbosity": 3,
+        "private_key_file": null,
+        "remote_user": null,
+        "connection": "ssh",
+        "timeout": null,
+        "ssh_common_args": null,
+        "sftp_extra_args": null,
+        "scp_extra_args": null,
+        "ssh_extra_args": null,
+        "ask_pass": false,
+        "connection_password_file": null,
+        "force_handlers": false,
+        "become": false,
+        "become_method": "sudo",
+        "become_user": null,
+        "become_ask_pass": false,
+        "become_password_file": null,
+        "tags": [
+          "all"
+        ],
+        "skip_tags": [],
+        "check": false,
+        "diff": false,
+        "inventory": [
+          "/etc/ansible/hosts"
+        ],
+        "listhosts": false,
+        "subset": null,
+        "flush_cache": false,
+        "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+        "vault_ids": [],
+        "ask_vault_pass": false,
+        "vault_password_files": [],
+        "forks": 5,
+        "module_path": null,
+        "syntax": false,
+        "listtasks": false,
+        "listtags": false,
+        "step": false,
+        "start_at_task": null,
+        "args": [
+          "/workspace/ansible-community/ara/tests/integration/ignored_files.yaml"
+        ]
+      },
+      "labels": [
+        {
+          "id": 29,
+          "name": "check:False"
+        },
+        {
+          "id": 30,
+          "name": "tags:all"
+        },
+        {
+          "id": 118,
+          "name": "repo:ansible-community/ara"
+        },
+        {
+          "id": 196,
+          "name": "ref:refs/pull/623/head"
+        },
+        {
+          "id": 197,
+          "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+        }
+      ],
+      "created": "2025-11-27T22:48:46.584181Z",
+      "updated": "2025-11-27T22:49:06.371555Z",
+      "started": "2025-11-27T22:48:46.068856Z",
+      "ended": "2025-11-27T22:49:05.970488Z",
+      "duration": "00:00:19.901632",
+      "name": null,
+      "ansible_version": "2.20.0",
+      "client_version": "0.0.0",
+      "python_version": "3.14.0",
+      "server_version": "1.7.4.dev11",
+      "status": "completed",
+      "path": "/workspace/ansible-community/ara/tests/integration/ignored_files.yaml",
+      "controller": "3249b4de22bb",
+      "user": "root"
+    },
+    {
+      "id": 4458,
+      "items": {
+        "plays": 1,
+        "tasks": 2,
+        "results": 1,
+        "hosts": 1,
+        "files": 1,
+        "records": 0
+      },
+      "arguments": {
+        "version": null,
+        "verbosity": 3,
+        "private_key_file": null,
+        "remote_user": null,
+        "connection": "ssh",
+        "timeout": null,
+        "ssh_common_args": null,
+        "sftp_extra_args": null,
+        "scp_extra_args": null,
+        "ssh_extra_args": null,
+        "ask_pass": false,
+        "connection_password_file": null,
+        "force_handlers": false,
+        "become": false,
+        "become_method": "sudo",
+        "become_user": null,
+        "become_ask_pass": false,
+        "become_password_file": null,
+        "tags": [
+          "all"
+        ],
+        "skip_tags": [],
+        "check": false,
+        "diff": false,
+        "inventory": [
+          "/etc/ansible/hosts"
+        ],
+        "listhosts": false,
+        "subset": null,
+        "flush_cache": false,
+        "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+        "vault_ids": [],
+        "ask_vault_pass": false,
+        "vault_password_files": [],
+        "forks": 5,
+        "module_path": null,
+        "syntax": false,
+        "listtasks": false,
+        "listtags": false,
+        "step": false,
+        "start_at_task": null,
+        "args": [
+          "/workspace/ansible-community/ara/tests/integration/incomplete.yaml"
+        ]
+      },
+      "labels": [
+        {
+          "id": 29,
+          "name": "check:False"
+        },
+        {
+          "id": 30,
+          "name": "tags:all"
+        },
+        {
+          "id": 118,
+          "name": "repo:ansible-community/ara"
+        },
+        {
+          "id": 196,
+          "name": "ref:refs/pull/623/head"
+        },
+        {
+          "id": 197,
+          "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+        }
+      ],
+      "created": "2025-11-27T22:48:40.663818Z",
+      "updated": "2025-11-27T22:48:44.338965Z",
+      "started": "2025-11-27T22:48:40.138923Z",
+      "ended": "2025-11-27T22:48:43.926038Z",
+      "duration": "00:00:03.787115",
+      "name": null,
+      "ansible_version": "2.20.0",
+      "client_version": "0.0.0",
+      "python_version": "3.14.0",
+      "server_version": "1.7.4.dev11",
+      "status": "expired",
+      "path": "/workspace/ansible-community/ara/tests/integration/incomplete.yaml",
+      "controller": "3249b4de22bb",
+      "user": "root"
+    },
+    {
+      "id": 4457,
+      "items": {
+        "plays": 1,
+        "tasks": 2,
+        "results": 2,
+        "hosts": 1,
+        "files": 1,
+        "records": 0
+      },
+      "arguments": {
+        "version": null,
+        "verbosity": 3,
+        "private_key_file": null,
+        "remote_user": null,
+        "connection": "ssh",
+        "timeout": null,
+        "ssh_common_args": null,
+        "sftp_extra_args": null,
+        "scp_extra_args": null,
+        "ssh_extra_args": null,
+        "ask_pass": false,
+        "connection_password_file": null,
+        "force_handlers": false,
+        "become": false,
+        "become_method": "sudo",
+        "become_user": null,
+        "become_ask_pass": false,
+        "become_password_file": null,
+        "tags": [
+          "all"
+        ],
+        "skip_tags": [],
+        "check": false,
+        "diff": false,
+        "inventory": [
+          "/etc/ansible/hosts"
+        ],
+        "listhosts": false,
+        "subset": null,
+        "flush_cache": false,
+        "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+        "vault_ids": [],
+        "ask_vault_pass": false,
+        "vault_password_files": [],
+        "forks": 5,
+        "module_path": null,
+        "syntax": false,
+        "listtasks": false,
+        "listtags": false,
+        "step": false,
+        "start_at_task": null,
+        "args": [
+          "/workspace/ansible-community/ara/tests/integration/failed.yaml"
+        ]
+      },
+      "labels": [
+        {
+          "id": 29,
+          "name": "check:False"
+        },
+        {
+          "id": 30,
+          "name": "tags:all"
+        },
+        {
+          "id": 118,
+          "name": "repo:ansible-community/ara"
+        },
+        {
+          "id": 196,
+          "name": "ref:refs/pull/623/head"
+        },
+        {
+          "id": 197,
+          "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+        }
+      ],
+      "created": "2025-11-27T22:48:30.719483Z",
+      "updated": "2025-11-27T22:48:38.123903Z",
+      "started": "2025-11-27T22:48:30.198920Z",
+      "ended": "2025-11-27T22:48:37.665389Z",
+      "duration": "00:00:07.466469",
+      "name": "Failed",
+      "ansible_version": "2.20.0",
+      "client_version": "0.0.0",
+      "python_version": "3.14.0",
+      "server_version": "1.7.4.dev11",
+      "status": "failed",
+      "path": "/workspace/ansible-community/ara/tests/integration/failed.yaml",
+      "controller": "3249b4de22bb",
+      "user": "root"
+    },
+    {
+      "id": 4456,
+      "items": {
+        "plays": 2,
+        "tasks": 9,
+        "results": 5,
+        "hosts": 2,
+        "files": 1,
+        "records": 0
+      },
+      "arguments": {
+        "version": null,
+        "verbosity": 3,
+        "private_key_file": null,
+        "remote_user": null,
+        "connection": "ssh",
+        "timeout": null,
+        "ssh_common_args": null,
+        "sftp_extra_args": null,
+        "scp_extra_args": null,
+        "ssh_extra_args": null,
+        "ask_pass": false,
+        "connection_password_file": null,
+        "force_handlers": false,
+        "become": false,
+        "become_method": "sudo",
+        "become_user": null,
+        "become_ask_pass": false,
+        "become_password_file": null,
+        "tags": [
+          "all"
+        ],
+        "skip_tags": [],
+        "check": false,
+        "diff": false,
+        "inventory": [
+          "/etc/ansible/hosts"
+        ],
+        "listhosts": false,
+        "subset": null,
+        "flush_cache": false,
+        "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+        "vault_ids": [],
+        "ask_vault_pass": false,
+        "vault_password_files": [],
+        "forks": 5,
+        "module_path": null,
+        "syntax": false,
+        "listtasks": false,
+        "listtags": false,
+        "step": false,
+        "start_at_task": null,
+        "args": [
+          "/workspace/ansible-community/ara/tests/integration/long_strings.yaml"
+        ]
+      },
+      "labels": [
+        {
+          "id": 29,
+          "name": "check:False"
+        },
+        {
+          "id": 30,
+          "name": "tags:all"
+        },
+        {
+          "id": 118,
+          "name": "repo:ansible-community/ara"
+        },
+        {
+          "id": 196,
+          "name": "ref:refs/pull/623/head"
+        },
+        {
+          "id": 197,
+          "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+        }
+      ],
+      "created": "2025-11-27T22:48:11.668507Z",
+      "updated": "2025-11-27T22:48:28.084970Z",
+      "started": "2025-11-27T22:48:11.159003Z",
+      "ended": "2025-11-27T22:48:27.636233Z",
+      "duration": "00:00:16.477230",
+      "name": "The ara project does not encourage or recommend using exceedingly long playbook names that contain a large number of long strings because they will get truncated if they are above 255 characters but we still need to test to make sure it works and we can",
+      "ansible_version": "2.20.0",
+      "client_version": "0.0.0",
+      "python_version": "3.14.0",
+      "server_version": "1.7.4.dev11",
+      "status": "completed",
+      "path": "/workspace/ansible-community/ara/tests/integration/long_strings.yaml",
+      "controller": "3249b4de22bb",
+      "user": "root"
+    }
+  ]
+}

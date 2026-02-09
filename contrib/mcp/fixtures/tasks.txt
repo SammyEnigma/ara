@@ -1,0 +1,118 @@
+# /api/v1/tasks
+{
+  "count": 649725,
+  "next": "https://demo.recordsansible.org/api/v1/tasks?limit=5&offset=5",
+  "previous": null,
+  "results": [
+    {
+      "id": 653231,
+      "items": {
+        "results": 0
+      },
+      "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+      "tags": [],
+      "play": 91882,
+      "created": "2025-11-27T22:49:22.747006Z",
+      "updated": "2025-11-27T22:49:24.620662Z",
+      "started": "2025-11-27T22:49:22.297819Z",
+      "ended": "2025-11-27T22:49:24.158367Z",
+      "duration": "00:00:01.860548",
+      "name": "Assert that facts have not been saved",
+      "uuid": "d5183dc0-c576-b8f5-495d-00000000000a",
+      "action": "assert",
+      "lineno": 55,
+      "handler": false,
+      "status": "completed",
+      "file": 394480,
+      "playbook": 4460
+    },
+    {
+      "id": 653230,
+      "items": {
+        "results": 1
+      },
+      "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+      "tags": [],
+      "play": 91882,
+      "created": "2025-11-27T22:49:21.384333Z",
+      "updated": "2025-11-27T22:49:22.288578Z",
+      "started": "2025-11-27T22:49:20.982422Z",
+      "ended": "2025-11-27T22:49:21.879175Z",
+      "duration": "00:00:00.896753",
+      "name": "Print facts for assertion",
+      "uuid": "d5183dc0-c576-b8f5-495d-000000000009",
+      "action": "debug",
+      "lineno": 51,
+      "handler": false,
+      "status": "completed",
+      "file": 394480,
+      "playbook": 4460
+    },
+    {
+      "id": 653229,
+      "items": {
+        "results": 1
+      },
+      "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+      "tags": [],
+      "play": 91882,
+      "created": "2025-11-27T22:49:20.090276Z",
+      "updated": "2025-11-27T22:49:20.973617Z",
+      "started": "2025-11-27T22:49:19.686024Z",
+      "ended": "2025-11-27T22:49:20.563824Z",
+      "duration": "00:00:00.877800",
+      "name": "Assert that we have collected the facts",
+      "uuid": "d5183dc0-c576-b8f5-495d-000000000008",
+      "action": "assert",
+      "lineno": 43,
+      "handler": false,
+      "status": "completed",
+      "file": 394480,
+      "playbook": 4460
+    },
+    {
+      "id": 653228,
+      "items": {
+        "results": 1
+      },
+      "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+      "tags": [],
+      "play": 91882,
+      "created": "2025-11-27T22:49:17.019584Z",
+      "updated": "2025-11-27T22:49:19.677443Z",
+      "started": "2025-11-27T22:49:16.569435Z",
+      "ended": "2025-11-27T22:49:19.269762Z",
+      "duration": "00:00:02.700327",
+      "name": "Get some facts",
+      "uuid": "d5183dc0-c576-b8f5-495d-000000000007",
+      "action": "setup",
+      "lineno": 35,
+      "handler": false,
+      "status": "completed",
+      "file": 394480,
+      "playbook": 4460
+    },
+    {
+      "id": 653227,
+      "items": {
+        "results": 0
+      },
+      "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+      "tags": [],
+      "play": 91882,
+      "created": "2025-11-27T22:49:15.153327Z",
+      "updated": "2025-11-27T22:49:16.557735Z",
+      "started": "2025-11-27T22:49:14.704129Z",
+      "ended": "2025-11-27T22:49:16.093823Z",
+      "duration": "00:00:01.389694",
+      "name": "Assert that the host doesn't have any facts so far",
+      "uuid": "d5183dc0-c576-b8f5-495d-000000000006",
+      "action": "assert",
+      "lineno": 27,
+      "handler": false,
+      "status": "completed",
+      "file": 394480,
+      "playbook": 4460
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+# /api/v1/files
+{
+  "count": 393602,
+  "next": "https://demo.recordsansible.org/api/v1/files?limit=5&offset=5",
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "sha1": "c0853819378b499827a8df7096aee2784fd28257",
+      "playbook": 1,
+      "created": "2020-01-31T15:42:55.757000Z",
+      "updated": "2020-01-31T15:42:55.757000Z",
+      "path": "/home/zuul/src/opendev.org/openstack/openstack-ansible/tests/bootstrap-aio.yml"
+    },
+    {
+      "id": 2,
+      "sha1": "89ade2eda4f23f4dc425d6051aeb30616ec72605",
+      "playbook": 1,
+      "created": "2020-01-31T15:42:55.889000Z",
+      "updated": "2020-01-31T15:42:55.889000Z",
+      "path": "/home/zuul/src/opendev.org/openstack/openstack-ansible/playbooks/defaults/repo_packages/openstack_services.yml"
+    },
+    {
+      "id": 3,
+      "sha1": "eb13f7ce1a9ccb1fa4bc527f676278a3ad5270bb",
+      "playbook": 1,
+      "created": "2020-01-31T15:42:55.982000Z",
+      "updated": "2020-01-31T15:42:55.982000Z",
+      "path": "/etc/ansible/roles/sshd/defaults/main.yml"
+    },
+    {
+      "id": 4,
+      "sha1": "2ad580cd063a038d41629f1b8d1ed5e9ba8c621b",
+      "playbook": 1,
+      "created": "2020-01-31T15:42:56.032000Z",
+      "updated": "2020-01-31T15:42:56.032000Z",
+      "path": "/etc/ansible/roles/sshd/meta/main.yml"
+    },
+    {
+      "id": 5,
+      "sha1": "e0a66bc4fef6b69c276cadbcc3d31869c31d80f8",
+      "playbook": 1,
+      "created": "2020-01-31T15:42:56.087000Z",
+      "updated": "2020-01-31T15:42:56.087000Z",
+      "path": "/etc/ansible/roles/sshd/tasks/main.yml"
+    }
+  ]
+}

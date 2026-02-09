@@ -1,0 +1,68 @@
+# /api/v1/hosts
+{
+  "count": 11965,
+  "next": "https://demo.recordsansible.org/api/v1/hosts?limit=5&offset=5",
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "playbook": 1,
+      "created": "2020-01-31T15:42:58.582000Z",
+      "updated": "2020-01-31T15:45:36.737000Z",
+      "name": "localhost",
+      "changed": 72,
+      "failed": 0,
+      "ok": 152,
+      "skipped": 56,
+      "unreachable": 0
+    },
+    {
+      "id": 2,
+      "playbook": 2,
+      "created": "2020-01-31T15:45:20.483000Z",
+      "updated": "2020-01-31T15:47:31.303000Z",
+      "name": "localhost",
+      "changed": 74,
+      "failed": 0,
+      "ok": 154,
+      "skipped": 54,
+      "unreachable": 0
+    },
+    {
+      "id": 3,
+      "playbook": 3,
+      "created": "2020-01-31T15:45:47.404000Z",
+      "updated": "2020-01-31T15:48:53.056000Z",
+      "name": "localhost",
+      "changed": 72,
+      "failed": 0,
+      "ok": 152,
+      "skipped": 56,
+      "unreachable": 0
+    },
+    {
+      "id": 4,
+      "playbook": 4,
+      "created": "2020-01-31T15:46:06.817000Z",
+      "updated": "2020-01-31T15:48:19.582000Z",
+      "name": "localhost",
+      "changed": 72,
+      "failed": 0,
+      "ok": 152,
+      "skipped": 56,
+      "unreachable": 0
+    },
+    {
+      "id": 5,
+      "playbook": 5,
+      "created": "2020-01-31T15:46:13.676000Z",
+      "updated": "2020-01-31T15:48:30.074000Z",
+      "name": "localhost",
+      "changed": 72,
+      "failed": 0,
+      "ok": 152,
+      "skipped": 56,
+      "unreachable": 0
+    }
+  ]
+}

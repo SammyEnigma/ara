@@ -1,0 +1,106 @@
+# /api/v1/playbooks/4448
+{
+  "id": 4448,
+  "items": {
+    "plays": 3,
+    "tasks": 47,
+    "results": 33,
+    "hosts": 2,
+    "files": 6,
+    "records": 6
+  },
+  "arguments": {
+    "version": null,
+    "verbosity": 3,
+    "private_key_file": null,
+    "remote_user": null,
+    "connection": "ssh",
+    "timeout": null,
+    "ssh_common_args": null,
+    "sftp_extra_args": null,
+    "scp_extra_args": null,
+    "ssh_extra_args": null,
+    "ask_pass": false,
+    "connection_password_file": null,
+    "force_handlers": false,
+    "become": false,
+    "become_method": "sudo",
+    "become_user": null,
+    "become_ask_pass": false,
+    "become_password_file": null,
+    "tags": [
+      "all"
+    ],
+    "skip_tags": [],
+    "check": false,
+    "diff": false,
+    "inventory": [
+      "/etc/ansible/hosts"
+    ],
+    "listhosts": false,
+    "subset": null,
+    "flush_cache": false,
+    "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+    "vault_ids": [],
+    "ask_vault_pass": false,
+    "vault_password_files": [],
+    "forks": 5,
+    "module_path": null,
+    "syntax": false,
+    "listtasks": false,
+    "listtags": false,
+    "step": false,
+    "start_at_task": null,
+    "args": [
+      "/workspace/ansible-community/ara/tests/integration/smoke.yaml"
+    ]
+  },
+  "labels": [
+    {
+      "id": 6,
+      "name": "integration tests"
+    },
+    {
+      "id": 7,
+      "name": "smoke"
+    },
+    {
+      "id": 29,
+      "name": "check:False"
+    },
+    {
+      "id": 30,
+      "name": "tags:all"
+    },
+    {
+      "id": 118,
+      "name": "repo:ansible-community/ara"
+    },
+    {
+      "id": 184,
+      "name": "os:Fedora-43"
+    },
+    {
+      "id": 196,
+      "name": "ref:refs/pull/623/head"
+    },
+    {
+      "id": 197,
+      "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+    }
+  ],
+  "created": "2025-11-27T22:43:07.844298Z",
+  "updated": "2025-11-27T22:44:31.117307Z",
+  "started": "2025-11-27T22:43:07.335638Z",
+  "ended": "2025-11-27T22:44:30.709022Z",
+  "duration": "00:01:23.373384",
+  "name": "Smoke tests",
+  "ansible_version": "2.20.0",
+  "client_version": "0.0.0",
+  "python_version": "3.14.0",
+  "server_version": "1.7.4.dev11",
+  "status": "completed",
+  "path": "/workspace/ansible-community/ara/tests/integration/smoke.yaml",
+  "controller": "3249b4de22bb",
+  "user": "root"
+}

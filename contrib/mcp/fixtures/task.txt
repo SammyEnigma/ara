@@ -1,0 +1,128 @@
+# /api/v1/task/653231
+{
+  "id": 653231,
+  "items": {
+    "results": 0
+  },
+  "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+  "playbook": {
+    "id": 4460,
+    "items": {
+      "plays": 1,
+      "tasks": 8,
+      "results": 4,
+      "hosts": 1,
+      "files": 1,
+      "records": 0
+    },
+    "arguments": {
+      "version": null,
+      "verbosity": 3,
+      "private_key_file": null,
+      "remote_user": null,
+      "connection": "ssh",
+      "timeout": null,
+      "ssh_common_args": null,
+      "sftp_extra_args": null,
+      "scp_extra_args": null,
+      "ssh_extra_args": null,
+      "ask_pass": false,
+      "connection_password_file": null,
+      "force_handlers": false,
+      "become": false,
+      "become_method": "sudo",
+      "become_user": null,
+      "become_ask_pass": false,
+      "become_password_file": null,
+      "tags": [
+        "all"
+      ],
+      "skip_tags": [],
+      "check": false,
+      "diff": false,
+      "inventory": [
+        "/etc/ansible/hosts"
+      ],
+      "listhosts": false,
+      "subset": null,
+      "flush_cache": false,
+      "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+      "vault_ids": [],
+      "ask_vault_pass": false,
+      "vault_password_files": [],
+      "forks": 5,
+      "module_path": null,
+      "syntax": false,
+      "listtasks": false,
+      "listtags": false,
+      "step": false,
+      "start_at_task": null,
+      "args": [
+        "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml"
+      ]
+    },
+    "labels": [
+      {
+        "id": 29,
+        "name": "check:False"
+      },
+      {
+        "id": 30,
+        "name": "tags:all"
+      },
+      {
+        "id": 118,
+        "name": "repo:ansible-community/ara"
+      },
+      {
+        "id": 196,
+        "name": "ref:refs/pull/623/head"
+      },
+      {
+        "id": 197,
+        "name": "sha:9f9683d61b3a6f5d28396221a8d30405a10c9731"
+      }
+    ],
+    "started": "2025-11-27T22:49:08.352266Z",
+    "ended": "2025-11-27T22:49:25.047963Z",
+    "duration": "00:00:16.695697",
+    "name": null,
+    "ansible_version": "2.20.0",
+    "client_version": "0.0.0",
+    "python_version": "3.14.0",
+    "server_version": "1.7.4.dev11",
+    "status": "completed",
+    "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml",
+    "controller": "3249b4de22bb",
+    "user": "root"
+  },
+  "play": {
+    "id": 91882,
+    "items": {
+      "tasks": 8,
+      "results": 4
+    },
+    "started": "2025-11-27T22:49:08.880012Z",
+    "ended": "2025-11-27T22:49:24.629825Z",
+    "duration": "00:00:15.749813",
+    "name": "assert that facts are ignored properly",
+    "status": "completed"
+  },
+  "file": {
+    "id": 394480,
+    "sha1": "53d4de77d8fc531cd0ff17e89755e40649742a48",
+    "path": "/workspace/ansible-community/ara/tests/integration/ignored_facts.yaml"
+  },
+  "tags": [],
+  "created": "2025-11-27T22:49:22.747006Z",
+  "updated": "2025-11-27T22:49:24.620662Z",
+  "started": "2025-11-27T22:49:22.297819Z",
+  "ended": "2025-11-27T22:49:24.158367Z",
+  "duration": "00:00:01.860548",
+  "name": "Assert that facts have not been saved",
+  "uuid": "d5183dc0-c576-b8f5-495d-00000000000a",
+  "action": "assert",
+  "lineno": 55,
+  "handler": false,
+  "status": "completed"
+}

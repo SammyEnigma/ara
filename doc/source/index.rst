@@ -24,3 +24,4 @@ Table of Contents
     Troubleshooting <troubleshooting>
     Changelog and release notes <changelog-release-notes>
     Distribution packages <distribution-packages>
+    MCP server for LLMs <mcp-server>

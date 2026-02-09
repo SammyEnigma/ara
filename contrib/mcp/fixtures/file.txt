@@ -1,0 +1,81 @@
+# /api/v1/files/1
+{
+  "id": 1,
+  "sha1": "c0853819378b499827a8df7096aee2784fd28257",
+  "playbook": {
+    "id": 1,
+    "items": {
+      "plays": 1,
+      "tasks": 261,
+      "results": 214,
+      "hosts": 1,
+      "files": 34,
+      "records": 0
+    },
+    "arguments": {
+      "verbosity": 0,
+      "ask_pass": false,
+      "private_key_file": null,
+      "remote_user": null,
+      "connection": "ssh",
+      "timeout": 5,
+      "ssh_common_args": "",
+      "sftp_extra_args": "",
+      "scp_extra_args": "",
+      "ssh_extra_args": "",
+      "force_handlers": true,
+      "flush_cache": null,
+      "become": false,
+      "become_method": "sudo",
+      "become_user": null,
+      "become_ask_pass": false,
+      "tags": [
+        "all"
+      ],
+      "skip_tags": [],
+      "check": false,
+      "syntax": null,
+      "diff": false,
+      "inventory": [
+        "/home/zuul/src/opendev.org/openstack/openstack-ansible/tests/test-inventory.ini"
+      ],
+      "listhosts": null,
+      "subset": null,
+      "extra_vars": "Not saved by ARA as configured by 'ignored_arguments'",
+      "ask_vault_pass": false,
+      "vault_password_files": [],
+      "vault_ids": [],
+      "forks": 5,
+      "module_path": null,
+      "listtasks": null,
+      "listtags": null,
+      "step": null,
+      "start_at_task": null,
+      "args": [
+        "bootstrap-aio.yml"
+      ]
+    },
+    "labels": [
+      {
+        "id": 110,
+        "name": "state:deployed"
+      }
+    ],
+    "started": "2020-01-31T15:42:55.415000Z",
+    "ended": "2020-01-31T15:45:36.831000Z",
+    "duration": "00:02:41.416000",
+    "name": null,
+    "ansible_version": "2.8.8",
+    "client_version": null,
+    "python_version": null,
+    "server_version": "1.5.9.dev56",
+    "status": "completed",
+    "path": "/home/zuul/src/opendev.org/openstack/openstack-ansible/tests/bootstrap-aio.yml",
+    "controller": "localhost",
+    "user": null
+  },
+  "content": "---\n# Copyright 2015, Rackspace US, Inc.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\n- name: Bootstrap the All-In-One (AIO)\n  hosts: localhost\n  gather_facts: True\n  user: root\n  roles:\n    - role: \"sshd\"\n    - role: \"bootstrap-host\"\n  vars_files:\n    - \"{{ playbook_dir }}/../playbooks/defaults/repo_packages/openstack_services.yml\"\n  environment: \"{{ deployment_environment_variables | default({}) }}\"\n  vars:\n    ansible_python_interpreter: \"/usr/bin/python\"\n    sftp_subsystem:\n        'apt': 'sftp /usr/lib/openssh/sftp-server'\n        'yum': 'sftp /usr/libexec/openssh/sftp-server'\n        'zypper': 'sftp /usr/lib/ssh/sftp-server'\n    sshd:\n      ListenAddress:\n        - 0.0.0.0\n        - '::'\n      Port: 22\n      Protocol: 2\n      HostKey:\n        - \"/etc/ssh/ssh_host_rsa_key\"\n        - \"/etc/ssh/ssh_host_ecdsa_key\"\n        - \"/etc/ssh/ssh_host_ed25519_key\"\n      UsePrivilegeSeparation: yes\n      KeyRegenerationInterval: 3600\n      ServerKeyBits: 1024\n      SyslogFacility: \"AUTH\"\n      LogLevel: \"INFO\"\n      LoginGraceTime: 120\n      StrictModes: yes\n      RSAAuthentication: yes\n      PubkeyAuthentication: yes\n      IgnoreRhosts: yes\n      RhostsRSAAuthentication: no\n      HostbasedAuthentication: no\n      PermitEmptyPasswords: no\n      PermitRootLogin: yes\n      ChallengeResponseAuthentication: no\n      PasswordAuthentication: no\n      X11DisplayOffset: 10\n      PrintMotd: no\n      PrintLastLog: no\n      TCPKeepAlive: yes\n      AcceptEnv: \"LANG LC_*\"\n      Subsystem: \"{{ sftp_subsystem[ansible_pkg_mgr] }}\"\n      UsePAM: yes\n      UseDNS: no\n      X11Forwarding: no\n      Compression: yes\n      CompressionLevel: 6\n      MaxSessions: 100\n      MaxStartups: \"100:100:100\"\n      GSSAPIAuthentication: no\n      GSSAPICleanupCredentials: no\n  pre_tasks:\n    - name: Run setup module\n      setup:\n        gather_subset:\n          - network\n          - hardware\n          - virtual\n  post_tasks:\n    - name: Check that new network interfaces are up\n      assert:\n        that:\n          - ansible_eth12['active'] == true\n          - ansible_eth13['active'] == true\n          - ansible_eth14['active'] == true\n      when:\n        - (bootstrap_host_container_tech | default('unknown')) != 'nspawn'\n",
+  "created": "2020-01-31T15:42:55.757000Z",
+  "updated": "2020-01-31T15:42:55.757000Z",
+  "path": "/home/zuul/src/opendev.org/openstack/openstack-ansible/tests/bootstrap-aio.yml"
+}
