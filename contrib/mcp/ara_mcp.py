@@ -269,7 +269,7 @@ def format_timestamp(ts: Optional[str]) -> str:
     return ts.replace("Z", " UTC").split(".")[0] if ts else "N/A"
 
 
-def extract_code_snippet(content: str, line_number: int, context: int = 5) -> str:
+def extract_code_snippet(content: str, line_number: int, context: int = 10) -> str:
     """Extract code snippet around a specific line number."""
     if not content:
         return "  (no content available)"
@@ -638,7 +638,7 @@ async def handle_list_tools() -> List[Tool]:
                     "line": {"type": "integer", "description": "Show snippet around this line"},
                     "context": {
                         "type": "integer",
-                        "default": 5,
+                        "default": 10,
                         "description": "Lines of context",
                     },
                 },
@@ -1065,7 +1065,7 @@ async def handle_get_file(args: Dict[str, Any]) -> List[TextContent]:
 
     content = data.get("content", "")
     line = args.get("line")
-    context = args.get("context", 5)
+    context = args.get("context", 10)
 
     lines = [
         f"File {data['id']}",
