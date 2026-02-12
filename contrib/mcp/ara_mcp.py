@@ -313,6 +313,186 @@ def get_nested(data: Any, key: str, default: Any = None) -> Any:
     return default
 
 
+def format_host_facts(facts: Dict[str, Any], indent: str = "  ") -> List[str]:
+    """
+    Format host facts for text output, mirroring the ARA web dashboard layout.
+    Returns a list of lines. Empty list if no facts are available.
+    """
+    if not facts or not isinstance(facts, dict):
+        return [f"{indent}Facts: Not available"]
+
+    lines = []
+
+    # --- System & Environment ---
+    system_lines = []
+
+    distro = facts.get("ansible_distribution", "")
+    version = facts.get("ansible_distribution_version", "")
+    if distro:
+        system_lines.append(f"{indent}OS:       {distro} {version}".rstrip())
+
+    kernel = facts.get("ansible_kernel")
+    if kernel:
+        system_lines.append(f"{indent}Kernel:   {kernel}")
+
+    # Python version: prefer structured ansible_python.version, fall back to ansible_python_version
+    python_info = facts.get("ansible_python", {})
+    if isinstance(python_info, dict):
+        pv = python_info.get("version", {})
+        if isinstance(pv, dict) and "major" in pv:
+            system_lines.append(f"{indent}Python:   {pv['major']}.{pv['minor']}.{pv['micro']}")
+        elif facts.get("ansible_python_version"):
+            system_lines.append(f"{indent}Python:   {facts['ansible_python_version']}")
+    elif facts.get("ansible_python_version"):
+        system_lines.append(f"{indent}Python:   {facts['ansible_python_version']}")
+
+    user_id = facts.get("ansible_user_id")
+    if user_id:
+        shell = facts.get("ansible_user_shell", "")
+        system_lines.append(f"{indent}User:     {user_id}" + (f" ({shell})" if shell else ""))
+
+    virt_type = facts.get("ansible_virtualization_type")
+    if virt_type:
+        virt_role = facts.get("ansible_virtualization_role", "")
+        system_lines.append(f"{indent}Virt:     {virt_type}" + (f" ({virt_role})" if virt_role else ""))
+
+    selinux = facts.get("ansible_selinux", {})
+    if isinstance(selinux, dict) and selinux.get("status"):
+        mode = selinux.get("mode", "")
+        system_lines.append(f"{indent}SELinux:  {selinux['status']}" + (f" ({mode})" if mode else ""))
+
+    pkg_mgr = facts.get("ansible_pkg_mgr")
+    if pkg_mgr:
+        system_lines.append(f"{indent}Pkg Mgr:  {pkg_mgr}")
+
+    uptime = facts.get("ansible_uptime_seconds")
+    if uptime:
+        try:
+            secs = int(uptime)
+            days, rem = divmod(secs, 86400)
+            hours, rem = divmod(rem, 3600)
+            mins = rem // 60
+            parts = []
+            if days:
+                parts.append(f"{days}d")
+            if hours:
+                parts.append(f"{hours}h")
+            parts.append(f"{mins}m")
+            system_lines.append(f"{indent}Uptime:   {' '.join(parts)}")
+        except (ValueError, TypeError):
+            pass
+
+    load = facts.get("ansible_loadavg", {})
+    if isinstance(load, dict) and load:
+        vals = []
+        for key in ("1m", "5m", "15m"):
+            v = load.get(key)
+            if v is not None:
+                vals.append(f"{key}={v:.2f}")
+        if vals:
+            system_lines.append(f"{indent}Load:     {', '.join(vals)}")
+
+    if system_lines:
+        lines.append(f"{indent}System & Environment:")
+        lines.extend(system_lines)
+
+    # --- Processor & Memory ---
+    hw_lines = []
+
+    processor = facts.get("ansible_processor", [])
+    if isinstance(processor, list) and len(processor) > 2:
+        hw_lines.append(f"{indent}CPU:      {processor[2]}")
+
+    cores = facts.get("ansible_processor_cores")
+    nproc = facts.get("ansible_processor_nproc")
+    if cores or nproc:
+        parts = []
+        if cores:
+            parts.append(f"{cores} cores")
+        if nproc:
+            parts.append(f"{nproc} threads")
+        hw_lines.append(f"{indent}          {', '.join(parts)}")
+
+    mem = facts.get("ansible_memory_mb", {})
+    real = mem.get("real", {}) if isinstance(mem, dict) else {}
+    if isinstance(real, dict) and real.get("total"):
+        used = real.get("used", 0)
+        total = real["total"]
+        pct = (used / total * 100) if total else 0
+        hw_lines.append(f"{indent}RAM:      {used} / {total} MB ({pct:.0f}% used)")
+
+    swap = mem.get("swap", {}) if isinstance(mem, dict) else {}
+    if isinstance(swap, dict) and swap.get("total") and swap["total"] > 0:
+        used = swap.get("used", 0)
+        total = swap["total"]
+        pct = (used / total * 100) if total else 0
+        hw_lines.append(f"{indent}Swap:     {used} / {total} MB ({pct:.0f}% used)")
+
+    mounts = facts.get("ansible_mounts", [])
+    if isinstance(mounts, list):
+        for mount in mounts:
+            if not isinstance(mount, dict):
+                continue
+            size_total = mount.get("size_total", 0)
+            if not size_total:
+                continue
+            size_avail = mount.get("size_available", 0)
+            used_pct = ((size_total - size_avail) / size_total * 100) if size_total else 0
+            avail_gb = size_avail / (1024 ** 3)
+            mount_point = mount.get("mount", "?")
+            fstype = mount.get("fstype", "")
+            hw_lines.append(f"{indent}Disk:     {mount_point} ({fstype}) {used_pct:.0f}% used, {avail_gb:.1f} GB free")
+
+    if hw_lines:
+        lines.append(f"{indent}Processor, Memory & Storage:")
+        lines.extend(hw_lines)
+
+    # --- Network ---
+    net_lines = []
+
+    hostname = facts.get("ansible_hostname")
+    if hostname:
+        net_lines.append(f"{indent}Hostname: {hostname}")
+
+    fqdn = facts.get("ansible_fqdn")
+    if fqdn and fqdn != hostname:
+        net_lines.append(f"{indent}FQDN:     {fqdn}")
+
+    ipv4 = facts.get("ansible_default_ipv4", {})
+    if isinstance(ipv4, dict) and ipv4.get("address"):
+        addr = ipv4["address"]
+        iface = ipv4.get("interface", "")
+        gw = ipv4.get("gateway", "")
+        parts = [f"{addr}"]
+        if iface:
+            parts[0] += f" ({iface})"
+        if gw:
+            parts.append(f"gw {gw}")
+        net_lines.append(f"{indent}IPv4:     {', '.join(parts)}")
+
+    ipv6 = facts.get("ansible_default_ipv6", {})
+    if isinstance(ipv6, dict) and ipv6.get("address"):
+        addr = ipv6["address"]
+        prefix = ipv6.get("prefix", "")
+        iface = ipv6.get("interface", "")
+        val = f"{addr}/{prefix}" if prefix else addr
+        if iface:
+            val += f" ({iface})"
+        net_lines.append(f"{indent}IPv6:     {val}")
+
+    dns = facts.get("ansible_dns", {})
+    if isinstance(dns, dict):
+        nameservers = dns.get("nameservers", [])
+        if nameservers:
+            net_lines.append(f"{indent}DNS:      {', '.join(str(ns) for ns in nameservers)}")
+
+    if net_lines:
+        lines.append(f"{indent}Network:")
+        lines.extend(net_lines)
+
+    return lines if lines else [f"{indent}Facts: Not available"]
+
+
 # Initialize Client and Server
 ara = ARAClient()
 server = Server("ara-records-ansible")
@@ -742,30 +922,10 @@ async def handle_get_host(args: Dict[str, Any]) -> List[TextContent]:
         f"Playbook: {playbook_id} ({playbook_url(playbook_id) if playbook_id else 'N/A'})",
     ]
 
-    # Extract key facts if available
+    # Host facts
     facts = data.get("facts", {})
-    if facts and isinstance(facts, dict):
-        lines.append("")
-        lines.append("Key Facts:")
-
-        distro = facts.get("ansible_distribution", "")
-        version = facts.get("ansible_distribution_version", "")
-        if distro:
-            lines.append(f"  OS:      {distro} {version}".strip())
-
-        for key, label in [
-            ("ansible_kernel", "Kernel"),
-            ("ansible_architecture", "Arch"),
-            ("ansible_python_version", "Python"),
-            ("ansible_pkg_mgr", "Pkg Mgr"),
-        ]:
-            val = facts.get(key)
-            if val:
-                lines.append(f"  {label}: {val}")
-
-        selinux = facts.get("ansible_selinux", {})
-        if isinstance(selinux, dict) and selinux.get("status"):
-            lines.append(f"  SELinux: {selinux.get('status')}")
+    lines.append("")
+    lines.extend(format_host_facts(facts))
 
     return [TextContent(type="text", text="\n".join(lines))]
 
@@ -1085,27 +1245,7 @@ async def handle_troubleshoot_playbook(args: Dict[str, Any]) -> List[TextContent
             facts = host_data.get("facts", {})
 
             lines.append(f"\nHost: {host_data.get('name', 'Unknown')} ({host_url(host_id)})")
-
-            if facts and isinstance(facts, dict):
-                distro = facts.get("ansible_distribution", "")
-                version = facts.get("ansible_distribution_version", "")
-                if distro:
-                    lines.append(f"  OS: {distro} {version}".strip())
-
-                for key, label in [
-                    ("ansible_kernel", "Kernel"),
-                    ("ansible_python_version", "Python"),
-                    ("ansible_pkg_mgr", "Pkg Mgr"),
-                ]:
-                    val = facts.get(key)
-                    if val:
-                        lines.append(f"  {label}: {val}")
-
-                selinux = facts.get("ansible_selinux", {})
-                if isinstance(selinux, dict) and selinux.get("status"):
-                    lines.append(f"  SELinux: {selinux.get('status')}")
-            else:
-                lines.append("  Facts: Not available")
+            lines.extend(format_host_facts(facts))
 
     # Summary
     lines.append("")
@@ -1147,22 +1287,8 @@ async def handle_troubleshoot_host(args: Dict[str, Any]) -> List[TextContent]:
 
     # Key facts
     facts = host.get("facts", {})
-    if facts and isinstance(facts, dict):
-        lines.append("Host Facts:")
-        distro = facts.get("ansible_distribution", "")
-        version = facts.get("ansible_distribution_version", "")
-        if distro:
-            lines.append(f"  OS: {distro} {version}".strip())
-
-        for key, label in [
-            ("ansible_kernel", "Kernel"),
-            ("ansible_python_version", "Python"),
-            ("ansible_pkg_mgr", "Pkg Mgr"),
-        ]:
-            val = facts.get(key)
-            if val:
-                lines.append(f"  {label}: {val}")
-        lines.append("")
+    lines.extend(format_host_facts(facts))
+    lines.append("")
 
     # Get failed and unreachable results concurrently
     failed_data, unreachable_data = await asyncio.gather(
