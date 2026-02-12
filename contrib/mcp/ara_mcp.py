@@ -8,6 +8,7 @@ Simplicity is a feature.
 Find the included README.rst and AGENTS.md for more information.
 """
 
+import asyncio
 import logging
 import os
 import re
@@ -23,6 +24,8 @@ from mcp.types import Tool, TextContent
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("ara-mcp")
+
+SERVER_VERSION = "1.0.0"
 
 
 # URL Building
@@ -78,7 +81,10 @@ class ARAClient:
             self._client = httpx.AsyncClient(
                 timeout=self.timeout,
                 auth=self._get_auth(),
-                headers={"Accept": "application/json"},
+                headers={
+                    "Accept": "application/json",
+                    "User-Agent": f"ara-contrib-mcp/{SERVER_VERSION}",
+                },
             )
         return self._client
 
@@ -88,10 +94,42 @@ class ARAClient:
 
     async def _request(self, path: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         client = await self._get_client()
-        resp = await client.get(
-            f"{self.base_url}{path}",
-            params={k: v for k, v in (params or {}).items() if v is not None},
-        )
+        url = f"{self.base_url}{path}"
+        try:
+            resp = await client.get(
+                url,
+                params={k: v for k, v in (params or {}).items() if v is not None},
+            )
+        except httpx.ConnectError:
+            raise ConnectionError(
+                f"Could not connect to ARA server at {self.base_url}. "
+                "Is the server running? Check ARA_API_SERVER."
+            )
+        except httpx.TimeoutException:
+            raise TimeoutError(
+                f"Request to {url} timed out after {self.timeout}s. "
+                "The server may be overloaded or the timeout too low."
+            )
+        except httpx.RequestError as e:
+            raise ConnectionError(f"Network error contacting ARA server: {e}")
+
+        if resp.status_code == 401:
+            raise PermissionError(
+                "Authentication failed (HTTP 401). "
+                "Check ARA_API_USERNAME and ARA_API_PASSWORD."
+            )
+        if resp.status_code == 403:
+            raise PermissionError(
+                "Access denied (HTTP 403). "
+                "The configured credentials may lack permission for this resource."
+            )
+        if resp.status_code == 404:
+            raise LookupError(f"Not found: {path} (HTTP 404). The resource may not exist.")
+        if resp.status_code >= 500:
+            raise RuntimeError(
+                f"ARA server error (HTTP {resp.status_code}) for {path}. "
+                "This is a server-side issue, not a query problem."
+            )
         resp.raise_for_status()
         return resp.json()
 
@@ -102,6 +140,28 @@ class ARAClient:
     async def get(self, resource: str, pk: int) -> Dict[str, Any]:
         """GET /api/v1/<resource>/<pk>."""
         return await self._request(f"/api/v1/{resource}/{pk}")
+
+    async def batch_get(self, resource: str, pks: List[int]) -> Dict[int, Dict[str, Any]]:
+        """Fetch multiple resources concurrently. Returns {pk: data} dict."""
+        if not pks:
+            return {}
+
+        async def _fetch_one(pk: int) -> tuple[int, Dict[str, Any]]:
+            data = await self.get(resource, pk)
+            return (pk, data)
+
+        results = await asyncio.gather(
+            *[_fetch_one(pk) for pk in pks],
+            return_exceptions=True,
+        )
+        out = {}
+        for result in results:
+            if isinstance(result, Exception):
+                logger.warning(f"Batch fetch error for {resource}: {result}")
+                continue
+            pk, data = result
+            out[pk] = data
+        return out
 
 
 # URL Parsing
@@ -487,15 +547,37 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
 
     handler = handlers.get(name)
     if not handler:
-        raise ValueError(f"Unknown tool: {name}")
+        available = ", ".join(sorted(handlers.keys()))
+        return [TextContent(type="text", text=f"Unknown tool: {name}\nAvailable tools: {available}")]
 
     try:
         return await handler(arguments)
+    except LookupError as e:
+        return [TextContent(type="text", text=f"Not found: {e}")]
+    except ConnectionError as e:
+        return [TextContent(type="text", text=f"Connection error: {e}")]
+    except TimeoutError as e:
+        return [TextContent(type="text", text=f"Timeout: {e}")]
+    except PermissionError as e:
+        return [TextContent(type="text", text=f"Authentication/authorization error: {e}")]
+    except ValueError as e:
+        return [TextContent(type="text", text=f"Invalid input: {e}")]
     except httpx.HTTPStatusError as e:
-        return [TextContent(type="text", text=f"API error: {e.response.status_code}")]
+        status = e.response.status_code
+        return [TextContent(
+            type="text",
+            text=f"API error (HTTP {status}): The ARA server returned an unexpected error.\n"
+                 f"URL: {e.request.url}",
+        )]
+    except RuntimeError as e:
+        return [TextContent(type="text", text=f"Server error: {e}")]
     except Exception as e:
-        logger.exception(f"Error in {name}")
-        return [TextContent(type="text", text=f"Error: {e}")]
+        logger.exception(f"Unexpected error in {name}")
+        return [TextContent(
+            type="text",
+            text=f"Unexpected error in {name}: {type(e).__name__}: {e}\n"
+                 "This may be a bug. Please report it.",
+        )]
 
 
 # Foundation Handlers: Playbooks
@@ -910,18 +992,33 @@ async def handle_troubleshoot_playbook(args: Dict[str, Any]) -> List[TextContent
 
     lines.append(f"Found {len(failed_results)} failure(s):")
 
-    # Cache for full result data and host info
-    full_results = {}
-    host_ids = set()
+    # Fetch all full results concurrently
+    result_ids = [r["id"] for r in failed_results]
+    full_results = await ara.batch_get("results", result_ids)
 
-    # Fetch all full results first
-    for result in failed_results:
-        result_id = result["id"]
-        full_results[result_id] = await ara.get("results", result_id)
-        host_info = full_results[result_id].get("host", {})
+    # Collect host IDs from fetched results
+    host_ids = set()
+    for full_result in full_results.values():
+        host_info = full_result.get("host", {})
         host_id = get_nested(host_info, "id")
         if host_id:
             host_ids.add(host_id)
+
+    # Pre-fetch all files and hosts concurrently
+    file_ids = set()
+    for full_result in full_results.values():
+        task_info = full_result.get("task", {})
+        task_file = get_nested(task_info, "file")
+        task_lineno = get_nested(task_info, "lineno")
+        if task_file and task_lineno:
+            file_id = get_nested(task_file, "id", task_file if isinstance(task_file, int) else None)
+            if file_id:
+                file_ids.add(file_id)
+
+    file_cache, host_cache = await asyncio.gather(
+        ara.batch_get("files", list(file_ids)),
+        ara.batch_get("hosts", list(host_ids)),
+    )
 
     # Display each failure
     for i, result in enumerate(failed_results, 1):
@@ -966,18 +1063,15 @@ async def handle_troubleshoot_playbook(args: Dict[str, Any]) -> List[TextContent
         # Code snippet
         if task_file and task_lineno:
             file_id = get_nested(task_file, "id", task_file if isinstance(task_file, int) else None)
-            if file_id:
-                try:
-                    file_data = await ara.get("files", file_id)
-                    file_content = file_data.get("content", "")
-                    file_path = file_data.get("path", "Unknown")
-                    if file_content:
-                        lines.append("")
-                        lines.append(f"Code ({file_path}, line {task_lineno}):")
-                        lines.append(file_url(file_id, task_lineno))
-                        lines.append(extract_code_snippet(file_content, task_lineno))
-                except Exception as e:
-                    logger.warning(f"Could not get code snippet: {e}")
+            if file_id and file_id in file_cache:
+                file_data = file_cache[file_id]
+                file_content = file_data.get("content", "")
+                file_path = file_data.get("path", "Unknown")
+                if file_content:
+                    lines.append("")
+                    lines.append(f"Code ({file_path}, line {task_lineno}):")
+                    lines.append(file_url(file_id, task_lineno))
+                    lines.append(extract_code_snippet(file_content, task_lineno))
 
     # Host information
     if host_ids:
@@ -985,34 +1079,33 @@ async def handle_troubleshoot_playbook(args: Dict[str, Any]) -> List[TextContent
         lines.append("--- Host Information ---")
 
         for host_id in host_ids:
-            try:
-                host_data = await ara.get("hosts", host_id)
-                facts = host_data.get("facts", {})
+            if host_id not in host_cache:
+                continue
+            host_data = host_cache[host_id]
+            facts = host_data.get("facts", {})
 
-                lines.append(f"\nHost: {host_data.get('name', 'Unknown')} ({host_url(host_id)})")
+            lines.append(f"\nHost: {host_data.get('name', 'Unknown')} ({host_url(host_id)})")
 
-                if facts and isinstance(facts, dict):
-                    distro = facts.get("ansible_distribution", "")
-                    version = facts.get("ansible_distribution_version", "")
-                    if distro:
-                        lines.append(f"  OS: {distro} {version}".strip())
+            if facts and isinstance(facts, dict):
+                distro = facts.get("ansible_distribution", "")
+                version = facts.get("ansible_distribution_version", "")
+                if distro:
+                    lines.append(f"  OS: {distro} {version}".strip())
 
-                    for key, label in [
-                        ("ansible_kernel", "Kernel"),
-                        ("ansible_python_version", "Python"),
-                        ("ansible_pkg_mgr", "Pkg Mgr"),
-                    ]:
-                        val = facts.get(key)
-                        if val:
-                            lines.append(f"  {label}: {val}")
+                for key, label in [
+                    ("ansible_kernel", "Kernel"),
+                    ("ansible_python_version", "Python"),
+                    ("ansible_pkg_mgr", "Pkg Mgr"),
+                ]:
+                    val = facts.get(key)
+                    if val:
+                        lines.append(f"  {label}: {val}")
 
-                    selinux = facts.get("ansible_selinux", {})
-                    if isinstance(selinux, dict) and selinux.get("status"):
-                        lines.append(f"  SELinux: {selinux.get('status')}")
-                else:
-                    lines.append("  Facts: Not available")
-            except Exception as e:
-                logger.warning(f"Could not get host facts: {e}")
+                selinux = facts.get("ansible_selinux", {})
+                if isinstance(selinux, dict) and selinux.get("status"):
+                    lines.append(f"  SELinux: {selinux.get('status')}")
+            else:
+                lines.append("  Facts: Not available")
 
     # Summary
     lines.append("")
@@ -1071,9 +1164,11 @@ async def handle_troubleshoot_host(args: Dict[str, Any]) -> List[TextContent]:
                 lines.append(f"  {label}: {val}")
         lines.append("")
 
-    # Get failed and unreachable results
-    failed_data = await ara.list("results", host=pk, status="failed", limit=50)
-    unreachable_data = await ara.list("results", host=pk, status="unreachable", limit=50)
+    # Get failed and unreachable results concurrently
+    failed_data, unreachable_data = await asyncio.gather(
+        ara.list("results", host=pk, status="failed", limit=50),
+        ara.list("results", host=pk, status="unreachable", limit=50),
+    )
 
     all_failures = failed_data.get("results", []) + unreachable_data.get("results", [])
 
@@ -1083,8 +1178,15 @@ async def handle_troubleshoot_host(args: Dict[str, Any]) -> List[TextContent]:
 
     lines.append(f"Found {len(all_failures)} failure(s):")
 
-    for i, result in enumerate(all_failures[:10], 1):
-        full_result = await ara.get("results", result["id"])
+    # Batch fetch full results for all failures (up to 10)
+    display_failures = all_failures[:10]
+    full_results = await ara.batch_get("results", [r["id"] for r in display_failures])
+
+    for i, result in enumerate(display_failures, 1):
+        full_result = full_results.get(result["id"])
+        if not full_result:
+            lines.append(f"\n{i}. Result #{result['id']}: could not fetch details")
+            continue
 
         task_info = full_result.get("task", {})
         content = full_result.get("content", {})
@@ -1151,25 +1253,55 @@ async def handle_analyze_performance(args: Dict[str, Any]) -> List[TextContent]:
         lines.append(f"--- Cross-Run Analysis ({len(related_playbooks)} recent runs) ---")
         lines.append("")
 
-        for rp in related_playbooks:
+        # Fetch top results for all related playbooks concurrently
+        rp_results_map = {}
+
+        async def _fetch_rp_results(rp):
+            rp_id = rp["id"]
+            rp_results = await ara.list("results", playbook=rp_id, order="-duration", limit=25)
+            return (rp_id, rp_results)
+
+        rp_fetches = await asyncio.gather(
+            *[_fetch_rp_results(rp) for rp in related_playbooks],
+            return_exceptions=True,
+        )
+
+        for rp, fetch_result in zip(related_playbooks, rp_fetches):
             rp_id = rp["id"]
             duration_sec = parse_duration_seconds(rp.get("duration"))
             controller = rp.get("controller", "unknown")
             status = rp.get("status", "unknown")
-
             all_run_durations.append((rp_id, duration_sec, controller, status))
 
-            # Fetch top results for this playbook to analyze task durations
-            rp_results = await ara.list("results", playbook=rp_id, order="-duration", limit=25)
-            for res in rp_results.get("results", []):
-                full_res = await ara.get("results", res["id"])
-                task_info = full_res.get("task", {})
-                task_name = get_nested(task_info, "name", "Unknown")
-                task_duration = parse_duration_seconds(full_res.get("duration"))
+            if isinstance(fetch_result, Exception):
+                logger.warning(f"Could not fetch results for playbook {rp_id}: {fetch_result}")
+                continue
+            _, rp_results = fetch_result
+            rp_results_map[rp_id] = rp_results.get("results", [])
 
-                if task_name not in task_times_aggregate:
-                    task_times_aggregate[task_name] = []
-                task_times_aggregate[task_name].append((rp_id, task_duration, controller))
+        # Batch fetch all full results across all related playbooks
+        all_result_ids = []
+        result_to_playbook = {}
+        for rp_id, results in rp_results_map.items():
+            for res in results:
+                all_result_ids.append(res["id"])
+                result_to_playbook[res["id"]] = rp_id
+
+        full_rp_results = await ara.batch_get("results", all_result_ids)
+
+        for res_id, full_res in full_rp_results.items():
+            rp_id = result_to_playbook[res_id]
+            controller = next(
+                (rp.get("controller", "unknown") for rp in related_playbooks if rp["id"] == rp_id),
+                "unknown",
+            )
+            task_info = full_res.get("task", {})
+            task_name = get_nested(task_info, "name", "Unknown")
+            task_duration = parse_duration_seconds(full_res.get("duration"))
+
+            if task_name not in task_times_aggregate:
+                task_times_aggregate[task_name] = []
+            task_times_aggregate[task_name].append((rp_id, task_duration, controller))
 
         # Show run history
         lines.append("Run history:")
@@ -1234,13 +1366,18 @@ async def handle_analyze_performance(args: Dict[str, Any]) -> List[TextContent]:
 
     lines.append(f"--- Slowest Tasks (Playbook #{pk}) ---")
 
+    # Batch fetch all full results
+    all_full_results = await ara.batch_get("results", [r["id"] for r in results])
+
     # Track by task+host to avoid duplicates
     seen = set()
     shown = 0
     task_times = {}  # action -> {count, total_time}
 
     for result in results:
-        full_result = await ara.get("results", result["id"])
+        full_result = all_full_results.get(result["id"])
+        if not full_result:
+            continue
 
         task_info = full_result.get("task", {})
         host_info = full_result.get("host", {})
@@ -1326,7 +1463,7 @@ async def handle_analyze_performance(args: Dict[str, Any]) -> List[TextContent]:
 async def main():
     init_options = InitializationOptions(
         server_name="ara-records-ansible",
-        server_version="1.0.0",
+        server_version=SERVER_VERSION,
         capabilities={},
     )
 
