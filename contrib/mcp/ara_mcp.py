@@ -76,6 +76,12 @@ class ARAClient:
             return httpx.BasicAuth(username, password)
         return None
 
+    def _get_verify(self) -> bool:
+        """Determine SSL verification based on ARA_API_INSECURE env variable."""
+        # If ARA_API_INSECURE is set to '1', 'true', or 'yes', disable verification
+        val = os.getenv("ARA_API_INSECURE", "false").strip().lower()
+        return not (val in ("1", "true", "yes"))
+
     async def _get_client(self) -> httpx.AsyncClient:
         if self._client is None or self._client.is_closed:
             self._client = httpx.AsyncClient(
@@ -85,6 +91,7 @@ class ARAClient:
                     "Accept": "application/json",
                     "User-Agent": f"ara-contrib-mcp/{SERVER_VERSION}",
                 },
+                verify=self._get_verify(),
             )
         return self._client
 
