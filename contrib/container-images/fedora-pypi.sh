@@ -14,7 +14,9 @@ buildah run "${build}" -- dnf install -y ${DEV_DEPENDENCIES}
 
 # Install ara from PyPI with API server extras for dependencies (django & django-rest-framework)
 # including database backend libraries and gunicorn
-buildah run "${build}" -- python3 -m pip install "ara[server,postgresql,mysql]" gunicorn
+# django-health-check>=4.0.0 introduces backwards incompatible changes
+# https://codeberg.org/ansible-community/ara/issues/644
+buildah run "${build}" -- python3 -m pip install "ara[server,postgresql,mysql]" gunicorn "django-health-check<4.0.0"
 
 # Remove development dependencies and clean up
 buildah run "${build}" -- /bin/bash -c "dnf remove -y ${DEV_DEPENDENCIES} && dnf autoremove -y && dnf clean all && python3 -m pip cache purge"
